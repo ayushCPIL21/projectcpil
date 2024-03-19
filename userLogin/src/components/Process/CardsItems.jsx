@@ -5,14 +5,14 @@ import "react-toastify/dist/ReactToastify.css";
 import { IoMdNotificationsOutline } from "react-icons/io";
 import axios from "axios";
 
-function CardsItems({ title, desc, freq, isActive, time }) {
+function CardsItems({ title, desc, freq, isActive,lob, time }) {
   
   function onClickHandle() {
-    axios.get("/api/run-batch-file/").then((response) =>{
-      console.log(response);
-    }).catch((error)=>{
-      console.log(error);
-  });
+  //   axios.get("/api/run-batch-file/").then((response) =>{
+  //     console.log(response);
+  //   }).catch((error)=>{
+  //     console.log(error);
+  // });
 
     // console.log(title);
     toast.success(title + " Played");
@@ -53,11 +53,13 @@ function CardsItems({ title, desc, freq, isActive, time }) {
           <div className="flex justify-between pr-3 min-w-0">
             <div className="flex justify-center items-center text-sm font-medium text-gray-900 dark:text-white">
               Status :
-              {isActive === "true" ? (
+              {isActive === "Completed" ? (
                 <div className="w-2 h-2 ml-2 rounded-full bg-green-600 shadow-2xl ring ring-green-600 ring-opacity-50"></div>
-              ) : (
+              ) : isActive === "Error" ? (
                 <div className="w-2 h-2 ml-2 rounded-full bg-red-600 shadow-2xl ring ring-red-600 ring-opacity-50"></div>
-              )}
+              ) : isActive === "Running"?(
+                <div className="w-2 h-2 ml-2 rounded-full bg-yellow-600 shadow-2xl ring ring-red-600 ring-opacity-50"></div>
+              ):""}
             </div>
             <p className="text-sm text-gray-500 truncate dark:text-gray-400">
               

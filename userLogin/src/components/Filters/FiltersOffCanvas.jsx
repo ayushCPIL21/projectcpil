@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import SwipeableDrawer from "@mui/material/SwipeableDrawer";
 import Button from "@mui/material/Button";
@@ -10,6 +10,7 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
+import axios from "axios";
 
 //it is important to place Box import after other MUI import else gives error "createTheme_default is not a function"
 import Box from "@mui/material/Box";
@@ -25,9 +26,9 @@ const MenuProps = {
   },
 };
 
-const lob = ["Lob1", "Lob2", "Lob3", "Lob4", "Lob5", "Lob6", "Lob7"]
-
-const status = ["Active" , "Inactive"]
+// const lob = ["Lob1", "Lob2", "Lob3", "Lob4", "Lob5", "Lob6", "Lob7"]
+// const lob = [];
+// const status = ["Active" , "Inactive"]
 
 function getStyles(name, lobName, theme) {
   return {
@@ -39,6 +40,10 @@ function getStyles(name, lobName, theme) {
 }
 
 export default function FiltersOffCanvas() {
+// const lob = ["Lob1", "Lob2", "Lob3", "Lob4", "Lob5", "Lob6", "Lob7"]
+// const lob = [];
+
+
   const theme = useTheme();
   const [lobName, setLobName] = React.useState([]);
   const [statusName, setStatusName] = React.useState([]);
@@ -185,6 +190,47 @@ export default function FiltersOffCanvas() {
       </div>
     </Box>
   );
+  
+  const [lob , setLob] = useState([]);
+  const [status, setStatus] = useState([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      const token = localStorage.getItem('token');
+      try {
+        const response = await axios.get("/api/process/lobs/", {
+          headers: {
+            'Authorization': `Token ${token}` 
+          }
+        });
+        
+        const res = await axios.get("/api/process/status/",{
+          headers: {
+            'Authorization': `Token ${token}` 
+          }
+        })
+
+        const val = [];
+        const statVal = [];
+        for(let i = 0 ; i < response.data.data.length ; i++){
+          // console.log(response.data.data[i].lob);
+            val.push(response.data.data[i].lob);
+        }
+        for(let i = 0 ; i < res.data.data.length ; i++){
+          // console.log(res.data.data[i].status);
+            statVal.push(res.data.data[i].status);
+        }
+        setLob(val)
+        setStatus(statVal)
+     
+      } catch (error) {
+        console.log("Error : ",error);
+      }
+    };
+
+  
+    fetchData(); 
+  
+  },[]);
 
   return (
     <div>

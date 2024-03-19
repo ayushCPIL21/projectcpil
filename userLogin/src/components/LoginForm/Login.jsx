@@ -2,9 +2,14 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { MdVisibilityOff, MdVisibility } from "react-icons/md";
 import { useState } from "react";
+import axios from "axios";
+import {ToastContainer, toast } from "react-toastify";
+import { useEffect } from "react";
 
 function Login() {
   const navigate = useNavigate();
+ 
+
   const [showPassword , setShowPassword] = useState(false);
   const [formData , setFormData] = useState({
     // uid:"",
@@ -14,13 +19,60 @@ function Login() {
     // sublob: "",
   })
 
+  const [userdata , setUserdata] = useState({});
+  
+  
+
   const {uid , email , password, lob , sublob} = formData;
 
-  function onSubmit(e) {
-    console.log(formData);
+  async function onSubmit(e) {
+    // console.log(formData);
     e.preventDefault();
-    //cheak wheather user is valid or not
-    navigate("/process");
+    try {
+      // localStorage.clear() //will do it in logging out
+      const response = await axios.post("/api/account/superuser/login/",{
+        username : email,
+        password :password
+      })
+      
+      const token = response.data.token;
+      localStorage.setItem('token' , token);
+      // console.log(response.data.data);
+      const userDataFromResponse = {
+        full_name: response.data.data.full_name,
+        phone_no: response.data.data.phone_no,
+        email: response.data.data.email
+      };
+
+      setUserdata(userDataFromResponse)
+      // setUserdata(response.data.data)
+      
+      // console.log(userdata);
+      if(token){
+        
+        // navigate(
+        //   '/process',
+        //   {state : userdata}
+        // )
+      }else{
+        console.log(error);
+        // toast.error("Bad Credentials")
+      }
+
+      // console.log(response);
+    } catch (error) {
+      // AxiosError
+      if(error.response.status === 400 ){
+        if(error.response.data["username"]){
+          toast.error(error.response.data.username[0])
+        }else{
+          toast.error(error.response.data.password[0])
+          
+        }
+      }
+      
+      
+    }
   }
 
   function onChange(e){
@@ -29,6 +81,13 @@ function Login() {
       [e.target.id] : e.target.value,
     }))
   }
+
+  useEffect(() => {
+    if (Object.keys(userdata).length !== 0) {
+      
+      navigate('/process', { state: userdata });
+    }
+  }, [userdata, navigate]);
   
 
 
@@ -42,7 +101,7 @@ function Login() {
         />
         {/* </a> */}
         {/* "bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" */}
-        <div className="w-full bg-white rounded-lg shadow-2xl rounded dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
+        <div className="w-full bg-white rounded-lg shadow-2xl  dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
           <div className="p-2 space-y-2 md:space-y-4 sm:p-8">
          
             <h1 className="text-xl text-center font-thin leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
@@ -74,7 +133,7 @@ function Login() {
               <div>
                 <label
                   htmlFor="email"
-                  className="text-start font-thin block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  className="text-start font-thin block mb-2 text-sm  text-gray-900 dark:text-white"
                 >
                   Your email
                 </label>
@@ -83,6 +142,7 @@ function Login() {
                   name="email"
                   id="email"
                   value={email}
+                  
                   onChange={onChange}
                   className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   placeholder="name@centuryply.com"
@@ -97,7 +157,7 @@ function Login() {
                           </div> */}
               <div>
                 
-              <label htmlFor="password" className="text-start font-thin block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>
+              <label htmlFor="password" className="text-start font-thin block mb-2 text-sm  text-gray-900 dark:text-white">Password</label>
                 <div className="relative">
                     
                   <input
@@ -108,6 +168,7 @@ function Login() {
                     //tracks the ongoing changes
                     onChange={onChange}
                     placeholder="Password"
+                    required
                   />
                   {showPassword ? (
                     <MdVisibilityOff
@@ -163,7 +224,7 @@ function Login() {
 
               <div className="flex items-center justify-between">
                 <div className="flex items-start">
-                  <div className="flex items-center h-5">
+                  {/* <div className="flex items-center h-5">
                     <input
                       id="remember"
                       aria-describedby="remember"
@@ -179,7 +240,7 @@ function Login() {
                     >
                       Remember me
                     </label>
-                  </div>
+                  </div> */}
                 </div>
                 <a
                   href="#"
@@ -194,13 +255,30 @@ function Login() {
               >
                 Login
               </button>
+              
               {/* <p className="text-sm font-light text-gray-500 dark:text-gray-400">
                               Don’t have an account yet? <a href="#" className="font-medium text-primary-600 hover:underline dark:text-primary-500">Sign up</a>
                           </p> */}
             </form>
+            
           </div>
         </div>
+        <ToastContainer
+        position="top-right"
+        autoClose={2000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+        transition:Bounce
+      />
+        
       </div>
+      
     </section>
   );
 }
