@@ -1,6 +1,7 @@
 import { createContext } from "react";
 import { useContext } from "react";
 
+//not really used now --> but for more scalability and global data access in future can be used
 export const UserContext = createContext({
     userInfo :{
         full_name :'Ayush',

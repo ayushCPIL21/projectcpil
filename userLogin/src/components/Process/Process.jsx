@@ -5,17 +5,32 @@ import Logout from "../Logout/Logout";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
 import { RiRefreshLine } from "react-icons/ri";
-
+import Pagination from "../Paginations/Pagination";
+import Loader from "../Loader/Loader";
+import { useNavigate } from "react-router-dom";
+import Notification from "../Notification/Notification";
+import { IoAdd } from "react-icons/io5";
+import AddProcess from "../AddProcess/AddProcess";
 
 function Process() {
+  const navigate = useNavigate();
   const location = useLocation();
   const user = location.state;
+  // console.log(user);
 
   const [processInfo, setProcessInfo] = useState([]); // array of objects
-  const [refresh , setRefresh] = useState(false);
+  const [refresh, setRefresh] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
-  function onRefresh(){
-    setRefresh(true)
+  
+  const [currentPage, setCurrentPage] = useState(1);
+  const [recordsPerPage] = useState(5);
+
+  function onRefresh() {
+    setRefresh(true);
+    if (refresh) {
+      <Loader />;
+    }
   }
 
   useEffect(() => {
@@ -27,21 +42,38 @@ function Process() {
             Authorization: `Token ${token}`,
           },
         });
-
+        // console.log(response);
         const val = [];
         for (let i = 0; i < response.data.data.length; i++) {
           val.push(response.data.data[i]);
         }
         // console.log(val);
         setProcessInfo(val);
+
       } catch (error) {
-        console.log(error);
+        if (error.response && error.response.status === 401) {
+          // console.error('Unauthorized. Redirecting to login page...');
+          localStorage.removeItem("token");
+          navigate("/login");
+        } else {
+          // Other error handling
+          console.error("Logout error:", error);
+          // Handle other errors as needed
+        }
       }
     };
     fetchData();
-    setRefresh(false)
-    
-  }, [refresh]);
+    setTimeout(() => setRefresh(false), 700);
+  }, [refresh,showModal]);
+
+  useEffect(() => {
+    <Notification />;
+  }, [processInfo]);
+
+  const indexOfLastRecord = currentPage * recordsPerPage;
+  const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
+  // const currentRecords = processInfo.slice(indexOfFirstRecord, indexOfLastRecord);
+  const nPages = Math.ceil(processInfo.length / recordsPerPage);
 
   //searching
   const [searchedItem, setSearchedItem] = useState({
@@ -57,46 +89,63 @@ function Process() {
     }));
   }
   // console.log(searchedItem);
-
+  // console.log(processInfo.expressions);
   // console.log(user.full_name);
   return (
     <div className="w-full max-w-2xl mx-auto shadow-md  rounded-lg px-4 py-3 m-5 text-white bg-gray-800">
-      
-    
-      <div className="flex items-center justify-between mb-4 ">
+      {refresh && <Loader />}
+      <div className="">
+        {/* TOPBAR */}
 
-        <div className="flex justify-center space-x-2 items-center"> 
-        <Logout />
-        <button
-   
-    className="w-md text-white bg-green-600 shadow-green-500/50 dark:shadow-lg dark:shadow-green-800/80 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-primary-300 rounded-full text-sm px-1 py-1 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-  >
-    <RiRefreshLine
-    value={refresh}
-    onClick={onRefresh}
-   className='text-lg rotate-[-90deg] text-center' 
-   />
-  </button>
+        <div className="flex items-center justify-between mb-4 ">
+          <div className="flex justify-center space-x-2 items-center">
+            <Logout />
+           
+            <button
+              onClick={() => setShowModal(true)}
+              className="w-md text-white  bg-yellow-400 shadow-yellow-400/40 dark:shadow-lg dark:shadow-yellow-400/40 hover:bg-yellow-700 focus:ring-4 focus:outline-none focus:ring-primary-300 rounded-full text-sm px-1 py-1 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+            >
+              <IoAdd
+                // value={refresh}
+                // onClick={onRefresh}
+                className="text-lg text-center font-bold text-white"
+              />
+            </button>
+            <button className="w-md text-white bg-green-600 shadow-green-500/50 dark:shadow-lg dark:shadow-green-800/80 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-primary-300 rounded-full text-sm px-1 py-1 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
+              <RiRefreshLine
+                value={refresh}
+                onClick={onRefresh}
+                className="text-lg rotate-[-90deg] text-center"
+              />
+            </button>
 
-       
+            {/* form popup     */}
+          <AddProcess showModal={showModal} setShowModal={setShowModal} refresh = {refresh} setRefresh = {setRefresh}/>
+          </div>
+
+          <div className="flex w-1/3 ml-2">
+            <h6 className="text-sm text-center font-thin-bold leading-none text-white dark:text-white">
+              Hi Admin! Welcome to RPA Console 👋
+            </h6>
+
+            {/* {user && (
+    <>
+     
+      <h6 className="text-xs  text-center font-thin-bold leading-none text-white dark:text-white">
+        {user.email}
+      </h6>
+      // Additional properties like phone number can be handled similarly 
+    </>
+  )} */}
+            {/* <h6 className="text-xs  font-thin-bold leading-none text-gray-900 dark:text-white">{user.phone_no}</h6> */}
+          </div>
+          <FiltersOffCanvas />
         </div>
-
-        <div className="flex flex-col ml-2">
-          <h6 className="text-sm  font-thin-bold leading-none text-gray-900 dark:text-white">
-            Hi! Admin 👋
-          </h6>
-          <h6 className="text-xs  font-thin-bold leading-none text-gray-900 dark:text-white">
-            {user.email}
-          </h6>
-          {/* <h6 className="text-xs  font-thin-bold leading-none text-gray-900 dark:text-white">{user.phone_no}</h6> */}
-        </div>
-        <FiltersOffCanvas />
-      </div>
-      
-      <div className="relative">
+        {/* SEARCHBAR */}
+        <div className="relative">
           <div className="absolute inset-y-0 left-4 lg:start-4 flex items-center pointer-events-none">
             <svg
-              className="w-4 h-4 text-gray-500 dark:text-gray-400"
+              className="w-4 h-4 text-gray-400 dark:text-gray-400"
               aria-hidden="true"
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -120,34 +169,44 @@ function Process() {
             placeholder="Search..."
             required
           />
+        </div>
       </div>
-        
-      <div className="flow-root">
-       
 
+      {/* PROCESSES BODY */}
+      <div className="flow-root">
         <ul
           role="list"
-          className="divide-y divide-gray-200 dark:divide-gray-700"
+          className="divide-y divide-gray-700 dark:divide-gray-700"
         >
+          {/* .slice is for pagination */}
           {processInfo
+            .slice(indexOfFirstRecord, indexOfLastRecord)
             .filter((item) =>
               item.name.toLowerCase().includes(searched.toLowerCase())
             )
             .map((item) => (
               <CardsItems
                 key={item.id}
+                ID={item.id}
                 title={item.name}
-                desc={item.path}
+                desc={item.fromatted_path}
                 freq={item.logs}
-                lob={item.lob}
-                isActive={item.status}
+                lob={item.line_of_business}
+                isActive={item.current_status}
                 time={item.updated_on}
+                expressions = {item.expressions}
+                refresh = {refresh} 
+                setRefresh = {setRefresh}
               />
             ))}
           {/* Conditional rendering for no matching items */}
-          {processInfo.filter((item) =>
-            item.name.toLowerCase().includes(searched.toLowerCase())
-          ).length === 0 &&
+          {/* .slice is for pagination */}
+
+          {processInfo
+            .slice(indexOfFirstRecord, indexOfLastRecord)
+            .filter((item) =>
+              item.name.toLowerCase().includes(searched.toLowerCase())
+            ).length === 0 &&
             searched !== "" && (
               <div className="text-center">
                 <p className="mb-4 text-lg text-gray-300">
@@ -172,6 +231,14 @@ function Process() {
               </div>
             )}
         </ul>
+      </div>
+      {/* pagination */}
+      <div className="flex justify-center">
+        <Pagination
+          nPages={nPages}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+        />
       </div>
     </div>
   );

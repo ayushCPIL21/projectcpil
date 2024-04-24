@@ -11,6 +11,7 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import axios from "axios";
+import {IoIosArrowBack} from "react-icons/io";
 
 //it is important to place Box import after other MUI import else gives error "createTheme_default is not a function"
 import Box from "@mui/material/Box";
@@ -40,10 +41,6 @@ function getStyles(name, lobName, theme) {
 }
 
 export default function FiltersOffCanvas() {
-// const lob = ["Lob1", "Lob2", "Lob3", "Lob4", "Lob5", "Lob6", "Lob7"]
-// const lob = [];
-
-
   const theme = useTheme();
   const [lobName, setLobName] = React.useState([]);
   const [statusName, setStatusName] = React.useState([]);
@@ -60,7 +57,7 @@ export default function FiltersOffCanvas() {
       // value
     );
   };
-  console.log(lobName);
+  // console.log(lobName);
 
   const handleChangeStatus = (event) => {
     const {
@@ -72,7 +69,7 @@ export default function FiltersOffCanvas() {
       // value
     );
   };
-  console.log(statusName);
+  // console.log(statusName);
 
   const [state, setState] = React.useState({
     top: false,
@@ -111,6 +108,14 @@ export default function FiltersOffCanvas() {
       onClick={toggleDrawer(anchor, false)}
       onKeyDown={toggleDrawer(anchor, false)}
     >
+          <button className="w-1/6 mt-1 ml-1 text-[#ec1d23]  rounded-full text-sm px-1 py-4 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
+              <IoIosArrowBack
+                onClick={applyHandler(anchor)}
+                className="text-2xl text-center"
+              />
+            </button>
+            
+     
       {/* lob selection */}
       <div>
         <FormControl sx={{ m: 1, width: 280 }}>
@@ -190,63 +195,53 @@ export default function FiltersOffCanvas() {
       </div>
     </Box>
   );
-  
-  const [lob , setLob] = useState([]);
+
+  const [lob, setLob] = useState([]);
   const [status, setStatus] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem("token");
       try {
         const response = await axios.get("/api/process/lobs/", {
           headers: {
-            'Authorization': `Token ${token}` 
-          }
+            Authorization: `Token ${token}`,
+          },
         });
-        
-        const res = await axios.get("/api/process/status/",{
+
+        const res = await axios.get("/api/process/status/", {
           headers: {
-            'Authorization': `Token ${token}` 
-          }
-        })
+            Authorization: `Token ${token}`,
+          },
+        });
 
         const val = [];
         const statVal = [];
-        for(let i = 0 ; i < response.data.data.length ; i++){
+        for (let i = 0; i < response.data.data.length; i++) {
           // console.log(response.data.data[i].lob);
-            val.push(response.data.data[i].lob);
+          val.push(response.data.data[i].lob);
         }
-        for(let i = 0 ; i < res.data.data.length ; i++){
+        for (let i = 0; i < res.data.data.length; i++) {
           // console.log(res.data.data[i].status);
-            statVal.push(res.data.data[i].status);
+          statVal.push(res.data.data[i].status);
         }
-        setLob(val)
-        setStatus(statVal)
-     
+        setLob(val);
+        setStatus(statVal);
       } catch (error) {
-        console.log("Error : ",error);
+        console.log("Error : ", error);
       }
     };
 
-  
-    fetchData(); 
-  
-  },[]);
+    fetchData();
+  }, []);
 
   return (
-    <div>
+    <div >
       {["right"].map((anchor) => (
         <React.Fragment key={anchor}>
           <Button onClick={() => setOpen(!open)}>
             <TuneIcon className="text-white" />
           </Button>
-          {/* <SwipeableDrawer
-            anchor={anchor}
-            open={state[anchor]}
-            onClose={toggleDrawer(anchor, false)}
-            onOpen={toggleDrawer(anchor, true)}
-          >
-            {list(anchor)}
-          </SwipeableDrawer> */}
+
           <SwipeableDrawer
             anchor={anchor}
             open={open}

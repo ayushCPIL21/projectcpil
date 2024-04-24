@@ -11,10 +11,11 @@ function App() {
     <section className='home-section'>
       <Router>
         <Routes>
-            <Route path='/' element={<Login/>}/>
-            <Route path='/process' element = {<PrivateRoute/>}>
-                 <Route path='/process' element = {<Process/> } />
+            
+            <Route path='/' element = {<PrivateRoute/>}>
+                 <Route path='/' element = {<Process/> } />
             </Route>
+            <Route path='/login' element={<Login/>}/>
         </Routes>
        
       </Router>

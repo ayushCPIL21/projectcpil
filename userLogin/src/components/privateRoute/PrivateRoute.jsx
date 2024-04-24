@@ -14,5 +14,5 @@ export default function PrivateRoute() {
    
     //custom hook to cheak if logged in or not
    //outlet is creating the private dom if loggedin is true then go to Outlet else back to sign in 
-    return loggedIn ? <Outlet/> : <Navigate to='/'/>
+    return loggedIn ? <Outlet/> : <Navigate to='/login'/>
  }
