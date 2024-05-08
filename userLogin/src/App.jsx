@@ -1,7 +1,9 @@
 import './App.css'
-import Login from './components/LoginForm/Login';
+import React from 'react';
 import { BrowserRouter as Router ,Routes ,Route } from 'react-router-dom';
-import Process from './components/Process/Process';
+
+import Process from './pages/ProcessPage/Process';
+import Login from './pages/LoginForm/Login';
 import PrivateRoute from './components/privateRoute/PrivateRoute';
 
 function App() {

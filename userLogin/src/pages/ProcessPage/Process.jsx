@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from "react";
-import CardsItems from "./CardsItems";
-import FiltersOffCanvas from "../Filters/FiltersOffCanvas";
-import Logout from "../Logout/Logout";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
 import { RiRefreshLine } from "react-icons/ri";
-import Pagination from "../Paginations/Pagination";
-import Loader from "../Loader/Loader";
 import { useNavigate } from "react-router-dom";
-import Notification from "../Notification/Notification";
 import { IoAdd } from "react-icons/io5";
-import AddProcess from "../AddProcess/AddProcess";
+
+import CardsItems from "../../components/Process/CardsItems";
+import FiltersOffCanvas from "../../components/Filters/FiltersOffCanvas"
+import Loader from "../../components/Loader/Loader"
+import Pagination from "../../components/Paginations/Pagination"
+import Notification from "../../components/Notification/Notification"
+import AddProcess from "../../components/AddProcess/AddProcess"
+import Logout from "../../components/Logout/Logout"
 
 function Process() {
   const navigate = useNavigate();

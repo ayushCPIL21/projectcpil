@@ -39,7 +39,7 @@ function AddProcess({ showModal, setShowModal, refresh, setRefresh}) {
       },
       {
         headers: {
-          Authorization: `Token ${token}`
+          Authorization: `Token ${token}`,
         }
       });
 
@@ -53,8 +53,8 @@ function AddProcess({ showModal, setShowModal, refresh, setRefresh}) {
       setShowModal(false)
       // console.log(response.data.detail[0]);
     } catch (error) {
-      // console.log(error.response.data.lob[0])
-      toast.error(error.response.data.lob[0])
+      // console.log(error.response.data)
+      toast.error(error.response.data.path)
     }
   }
 
