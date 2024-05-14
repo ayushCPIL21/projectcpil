@@ -89,9 +89,7 @@ function Process() {
       [e.target.id]: e.target.value,
     }));
   }
-  // console.log(searchedItem);
-  // console.log(processInfo.expressions);
-  // console.log(user.full_name);
+
   return (
     <div className="w-full max-w-2xl mx-auto shadow-md  rounded-lg px-4 py-3 m-5 text-white bg-gray-800">
       {refresh && <Loader />}
@@ -128,19 +126,10 @@ function Process() {
             <h6 className="text-sm text-center font-thin-bold leading-none text-white dark:text-white">
               Hi Admin! Welcome to RPA Console 👋
             </h6>
-
-            {/* {user && (
-    <>
-     
-      <h6 className="text-xs  text-center font-thin-bold leading-none text-white dark:text-white">
-        {user.email}
-      </h6>
-      // Additional properties like phone number can be handled similarly 
-    </>
-  )} */}
-            {/* <h6 className="text-xs  font-thin-bold leading-none text-gray-900 dark:text-white">{user.phone_no}</h6> */}
           </div>
+
           <FiltersOffCanvas />
+          
         </div>
         {/* SEARCHBAR */}
         <div className="relative">
@@ -185,7 +174,7 @@ function Process() {
             .filter((item) =>
               item.name.toLowerCase().includes(searched.toLowerCase())
             )
-            .map((item) => (
+            .map((item ,index) => (
               <CardsItems
                 key={item.id}
                 ID={item.id}

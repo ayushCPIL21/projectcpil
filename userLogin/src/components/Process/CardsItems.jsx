@@ -40,7 +40,6 @@ function CardsItems({
     } catch (error) {
       toast.error(error.response.data.detail[0]);
     }
-    // toast.success(title + " Played");
   }
 
   //getting log data
@@ -100,7 +99,7 @@ function CardsItems({
         }
       );
 
-      console.log(response.data.detail[0]);
+      //console.log(response.data.detail[0]);
       setEdited(true);
       toast.success(response.data.detail[0]);
       setTimeout(()=> setShowEditModal(false), 3000);
@@ -296,9 +295,7 @@ function CardsItems({
                   <h6>Time : {time}</h6>
                   <h6>Expressions : {expressions}</h6>
                 </div>
-                {/* <div className="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
-               
-                </div> */}
+             
               </div>
             </div>
           </div>
@@ -334,7 +331,7 @@ function CardsItems({
                         d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
                       />
                     </svg>
-                    {/* <span className="sr-only">Close modal</span> */}
+                 
                   </button>
                 </div>
 

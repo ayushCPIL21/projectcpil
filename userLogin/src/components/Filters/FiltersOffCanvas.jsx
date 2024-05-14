@@ -27,9 +27,7 @@ const MenuProps = {
   },
 };
 
-// const lob = ["Lob1", "Lob2", "Lob3", "Lob4", "Lob5", "Lob6", "Lob7"]
-// const lob = [];
-// const status = ["Active" , "Inactive"]
+
 
 function getStyles(name, lobName, theme) {
   return {

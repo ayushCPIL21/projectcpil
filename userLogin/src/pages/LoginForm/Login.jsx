@@ -23,7 +23,7 @@ function Login() {
     // console.log(formData.email);
     e.preventDefault();
     try {
-      // localStorage.clear() //will do it in logging out
+  
       const response = await axios.post("/api/account/superuser/login/", {
         username: email,
         password: password,
@@ -43,7 +43,7 @@ function Login() {
       if (token) {
       } else {
         console.log(error);
-        // toast.error("Bad Credentials")
+       
       }
 
       // console.log(response);
@@ -68,7 +68,7 @@ function Login() {
 
   useEffect(() => {
     if (Object.keys(userdata).length !== 0) {
-      // console.log(userdata);
+     
       navigate("/", { state: userdata });
     }
   }, [userdata, navigate]);
@@ -81,8 +81,7 @@ function Login() {
           src="https://zenlayercdn.centuryply.com/assets/img/logo.png"
           alt="logo"
         />
-        {/* </a> */}
-        {/* "bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" */}
+      
         <div className="w-full rounded-lg shadow-2xl border dark:border md:mt-0 sm:max-w-md xl:p-0 bg-gray-800 dark:bg-gray-800 border-gray-700 dark:border-gray-700">
           <div className="p-2 space-y-2 md:space-y-4 sm:p-8">
             <h1 className="text-xl text-center font-thin leading-tight tracking-tight text-white md:text-2xl dark:text-white">
