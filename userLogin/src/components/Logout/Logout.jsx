@@ -16,7 +16,7 @@ function Logout() {
     }
 
     try {
-      const response = await axios.get("/api/account/logout/", {
+      const response = await axios.get(`${import.meta.env.VITE_API_URI}/api/account/logout/`, {
         headers: {
           Authorization: `Token ${token}`,
         },

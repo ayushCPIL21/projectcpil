@@ -30,7 +30,7 @@ function AddProcess({ showModal, setShowModal, refresh, setRefresh}) {
     const token = localStorage.getItem("token");
     // console.log(formData);
     try {
-      const response = await axios.post("/api/process/",  {
+      const response = await axios.post(`${import.meta.env.VITE_API_URI}/api/process/`,  {
         name: title,
         path: path,
         expressions : expressions,
@@ -63,7 +63,7 @@ function AddProcess({ showModal, setShowModal, refresh, setRefresh}) {
     const fetchData = async () => {
       const token = localStorage.getItem("token");
       try {
-        const response = await axios.get("/api/process/lobs/", {
+        const response = await axios.get(`${import.meta.env.VITE_API_URI}/api/process/lobs/`, {
           headers: {
             Authorization: `Token ${token}`,
           },

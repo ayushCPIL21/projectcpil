@@ -30,7 +30,7 @@ function CardsItems({
   async function onClickHandle() {
     const token = localStorage.getItem("token");
     try {
-      const response = await axios.get(`/api/process/run/${parameter}/`, {
+      const response = await axios.get(`${import.meta.env.VITE_API_URI}/api/process/run/${parameter}/`, {
         headers: {
           Authorization: `Token ${token}`,
         },
@@ -46,7 +46,7 @@ function CardsItems({
   async function fetchLogDetails() {
     const token = localStorage.getItem("token");
     try {
-      const response = await axios.get(`/api/process/logs/${ID}/`, {
+      const response = await axios.get(`${import.meta.env.VITE_API_URI}/api/process/logs/${ID}/`, {
         headers: {
           Authorization: `Token ${token}`,
         },
@@ -85,7 +85,7 @@ function CardsItems({
     const token = localStorage.getItem("token");
     try {
       const response = await axios.put(
-        `/api/process/${ID}/`,
+        `${import.meta.env.VITE_API_URI}/api/process/${ID}/`,
         {
           name: newTitle,
           path: newPath,
@@ -120,7 +120,7 @@ function CardsItems({
     const fetchData = async () => {
       const token = localStorage.getItem("token");
       try {
-        const response = await axios.get("/api/process/lobs/", {
+        const response = await axios.get(`${import.meta.env.VITE_API_URI}/api/process/lobs/`, {
           headers: {
             Authorization: `Token ${token}`,
           },

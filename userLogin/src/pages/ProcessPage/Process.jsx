@@ -9,11 +9,12 @@ import CardsItems from "../../components/Process/CardsItems";
 import FiltersOffCanvas from "../../components/Filters/FiltersOffCanvas"
 import Loader from "../../components/Loader/Loader"
 import Pagination from "../../components/Paginations/Pagination"
-import Notification from "../../components/Notification/Notification"
+
 import AddProcess from "../../components/AddProcess/AddProcess"
 import Logout from "../../components/Logout/Logout"
 
 function Process() {
+ 
   const navigate = useNavigate();
   const location = useLocation();
   const user = location.state;
@@ -38,7 +39,7 @@ function Process() {
     const fetchData = async () => {
       const token = localStorage.getItem("token");
       try {
-        const response = await axios.get("/api/process/", {
+        const response = await axios.get(`${import.meta.env.VITE_API_URI}/api/process/`, {
           headers: {
             Authorization: `Token ${token}`,
           },
@@ -67,9 +68,7 @@ function Process() {
     setTimeout(() => setRefresh(false), 700);
   }, [refresh,showModal]);
 
-  useEffect(() => {
-    <Notification />;
-  }, [processInfo]);
+
 
   const indexOfLastRecord = currentPage * recordsPerPage;
   const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;

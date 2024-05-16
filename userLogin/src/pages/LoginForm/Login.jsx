@@ -24,7 +24,7 @@ function Login() {
     e.preventDefault();
     try {
   
-      const response = await axios.post("/api/account/superuser/login/", {
+      const response = await axios.post(`${import.meta.env.VITE_API_URI}/api/account/superuser/login/`, {
         username: email,
         password: password,
       });

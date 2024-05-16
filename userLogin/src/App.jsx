@@ -13,11 +13,13 @@ function App() {
     <section className='home-section'>
       <Router>
         <Routes>
-            
+            <Route path='/'>
             <Route path='/' element = {<PrivateRoute/>}>
                  <Route path='/' element = {<Process/> } />
             </Route>
             <Route path='/login' element={<Login/>}/>
+            </Route>
+            
         </Routes>
        
       </Router>

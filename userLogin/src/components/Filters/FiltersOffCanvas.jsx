@@ -200,13 +200,13 @@ export default function FiltersOffCanvas() {
     const fetchData = async () => {
       const token = localStorage.getItem("token");
       try {
-        const response = await axios.get("/api/process/lobs/", {
+        const response = await axios.get(`${import.meta.env.VITE_API_URI}/api/process/lobs/`, {
           headers: {
             Authorization: `Token ${token}`,
           },
         });
 
-        const res = await axios.get("/api/process/status/", {
+        const res = await axios.get(`${import.meta.env.VITE_API_URI}/api/process/status/`, {
           headers: {
             Authorization: `Token ${token}`,
           },
